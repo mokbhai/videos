@@ -1,7 +1,7 @@
 fps = 24
 
 audio_dir = "../Audio/"
-images_dir = "../Images/"
+images_dir = "../Images/imgs/"
 out_path = "../Videos/"
 
 import argparse
@@ -13,6 +13,7 @@ import edge_tts
 from moviepy.editor import *  
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
+from itertools import cycle
 
 if not os.path.exists(audio_dir):
     os.makedirs(audio_dir)
@@ -26,7 +27,7 @@ args = parser.parse_args()
 
 NAME = args.name
 
-with open('../Text/data.txt', 'r') as file:
+with open('../Text/output.txt', 'r') as file:
     TEXT = file.read()
 
 # Check if the text is empty
@@ -77,18 +78,29 @@ images = [img for img in os.listdir(images_dir) if img.endswith(('.png', '.jpg',
 # Randomize the order of the images
 random.shuffle(images)
 
-def process_image(image_path, duration):
+def process_image(image_path):
     clip = ImageClip(image_path)  # type: ignore
-    clip = clip.set_duration(duration)  # Set duration for each clip
+    clip = clip.set_duration(5)  # Set duration for each clip to 5 seconds
     return clip
 
 # Use ThreadPoolExecutor to parallelize image processing
 with ThreadPoolExecutor() as executor:
-    futures = [executor.submit(process_image, os.path.join(images_dir, image), audio.duration / len(images)) for image in images]
+    futures = [executor.submit(process_image, os.path.join(images_dir, image)) for image in images]
     clips = [future.result() for future in futures]
 
+# Cycle through the images until the audio duration is reached
+final_clips = []
+time = 0
+for clip in cycle(clips):
+    if time + 5 > audio.duration:
+        clip = clip.set_duration(audio.duration-time)  # If the remaining duration is less than 5 seconds, set that as the duration
+    final_clips.append(clip)
+    time += 5
+    if time >= audio.duration:
+        break
+
 # Concatenate images and set the duration of each image to the duration of the audio divided by the number of images
-concat_clip = concatenate_videoclips(clips)  # type: ignore
+concat_clip = concatenate_videoclips(final_clips)  # type: ignore
 
 # Combine audio and images
 video = concat_clip.set_audio(audio)
@@ -104,5 +116,5 @@ destination_file = out_path + NAME + ".vtt"
 
 # Use the os.rename function to move the file and delete them
 os.rename(source_file, destination_file)
-os.unlink(OUTPUT_FILE)
-os.unlink(WEBVTT_FILE)
+# os.unlink(OUTPUT_FILE)
+# os.unlink(WEBVTT_FILE)

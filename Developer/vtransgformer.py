@@ -16,13 +16,17 @@ def get_all_text_from_website(url):
 def get_text_from_specific_div(url, div_class):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
+
     divs = soup.find_all('div', class_=div_class)
     text = ' '.join([div.get_text() for div in divs])
+
     text = text.replace('Thank you so much!', "")
     text = text.replace('Translator: Atlas Studios Editor: Atlas Studios', "")
     text = text.replace('Visit and read more novel to help us update chapter quickly.', "")
+
     with open('../Text/output.txt', 'a') as f:
         f.write(text)
+
     return text
 
 
@@ -62,20 +66,32 @@ def google_translate(text):
     else:
         print("Translation failed. Please try again.")
 
-# Use the function
-url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-"
+# # Use the function
+# url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-"
 # text = get_all_text_from_website(url)
 # text = get_text_from_specific_div(url, "txt")
 
-chapter_index = 241
+# chapter_index = 241
 
-for i in range(0, 20):
+# for i in range(0, 20):
+#     # print("Getting txt from: ", url + str(i))
+#     idx = chapter_index + i
+#     text = get_text_from_specific_div(url + str(idx), "txt")
+#     while not text:  # Retry the iteration if no text was found
+#         print("No text found, in " + url + str(idx) + " trying again...")
+#         text = get_text_from_specific_div(url + str(idx), "txt")
+#     print(text[:14] + " done\n")
+
+url = "https://novellive.org/book/everyone-has-four-skills/chapter-"
+chapter_index = 1
+
+for i in range(0, 100):
     # print("Getting txt from: ", url + str(i))
-    idx = chapter_index + i
-    text = get_text_from_specific_div(url + str(idx), "txt")
+    idx = str(chapter_index + i)
+    text = get_text_from_specific_div(url + idx, "txt")
     while not text:  # Retry the iteration if no text was found
-        print("No text found, in " + url + str(idx) + " trying again...")
-        text = get_text_from_specific_div(url + str(idx), "txt")
-    print(text[:14] + " done\n")
+        print("No text found, in " + url + idx + " trying again...")
+        text = get_text_from_specific_div(url + idx, "txt")
+    print("Chapter: " + idx + " done\n")
 
 # transformers_translate(text)
