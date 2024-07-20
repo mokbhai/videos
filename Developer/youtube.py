@@ -1,11 +1,14 @@
+import os
+import pickle
 from googleapiclient.discovery import build # type: ignore
 from googleapiclient.http import MediaFileUpload # type: ignore
 from google_auth_oauthlib.flow import InstalledAppFlow # type: ignore
-from googleapiclient.errors import HttpError # type: ignore
+from googleapiclient.errors import HttpError
+from requests import Request # type: ignore
 
-VIDEO_FILE = "126"
+VIDEO_FILE = "test"
 chapters = "126 to 116"
-CLIENT_SECRETS_FILE = "client_secret_429738725753-74dha38siq6q1fhjh8adf5945j0arqtp.apps.googleusercontent.com.json"
+CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
 description = f"""
@@ -25,22 +28,36 @@ Enjoy the video and don't forget to like, share, and subscribe for more anime an
 Remember, a good YouTube video description provides context about the video, includes relevant keywords to help users find your video, and encourages viewers to engage with your content.
 """
 
-
 def get_authenticated_service():
-    flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
-    credentials = flow.run_local_server()
-    return build('youtube', 'v3', credentials=credentials)
+    creds = None
+    # The file token.pickle stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                CLIENT_SECRETS_FILE, SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    return build('youtube', 'v3', credentials=creds)
 
 def initialize_upload(youtube):
-    media = MediaFileUpload("./Videos/" + VIDEO_FILE + ".mp4", 
-                            mimetype='video/mp4', 
-                            resumable=True,
-                            chunksize=-1)  # maximum chunk size
+    media = MediaFileUpload("../Videos/" + VIDEO_FILE + ".mp4", mimetype='video/mp4', resumable=True, chunksize=-1)  # maximum chunk size
+    
     request = youtube.videos().insert(
         part="snippet,status",
         body={
             "snippet": {
-                "title": "Chapter " + VIDEO_FILE + " My Grandfather Became a General in Another World and I am invincible in the city! | | MJ",
+                "title": "Chapter  My Grandfather Became a General in Another World and I am invincible in the city! | | MJ",
                 "description": description,
                 "tags": ["#animerecap", "#manhwaedit", "#anime", "#animerecommendations", "#manhwarecommendation", "#manga", "#mangaunboxing", "#mangacollection", "#webtoon", "#manhwarecap", "#anime", "#animerecap"],
                 "categoryId": "1"

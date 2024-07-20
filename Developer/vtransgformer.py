@@ -67,7 +67,7 @@ url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am
 # text = get_all_text_from_website(url)
 # text = get_text_from_specific_div(url, "txt")
 
-chapter_index = 221
+chapter_index = 241
 
 for i in range(0, 20):
     # print("Getting txt from: ", url + str(i))
