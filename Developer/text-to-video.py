@@ -1,0 +1,100 @@
+fps = 12
+
+audio_dir = "../Audio/"
+images_dir = "../Images/1/"
+out_path = "../Videos/"
+
+import argparse
+import random
+import os
+import asyncio
+import re
+import edge_tts  
+from moviepy.editor import *  
+from tqdm import tqdm
+
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("name", help="Name for the output files")
+args = parser.parse_args()
+
+NAME = args.name
+
+with open('../Text/data.txt', 'r') as file:
+    TEXT = file.read()
+
+# Check if the text is empty
+if not TEXT.strip():
+    raise ValueError("The file is empty.")
+
+TEXT = TEXT.replace('Save Bookmark', ' ')
+TEXT = TEXT.replace('front pagePC versionbookshelf', ' ')
+TEXT = TEXT.replace('returnfront page', ' ')
+TEXT = TEXT.replace('Turn off the lightsEye protection', ' ')
+TEXT = TEXT.replace('TraditionalbigmiddleSmall', ' ')
+TEXT = TEXT.replace('My grandpa rebelled in another world, and I am invincible in the city!', ' ')
+TEXT = TEXT.replace('\n', ' ')
+TEXT = TEXT.replace('"', "'")
+TEXT = re.sub(' +', ' ', TEXT)
+
+VOICE = "en-CA-LiamNeural"
+
+OUTPUT_FILE = audio_dir + NAME + ".mp3"
+WEBVTT_FILE = audio_dir + NAME + ".vtt"
+
+async def amain() -> None:
+    """Main function"""
+    communicate = edge_tts.Communicate(TEXT, VOICE)
+    submaker = edge_tts.SubMaker()
+    pbar = tqdm(total=len(TEXT))
+    with open(OUTPUT_FILE, "wb") as file:
+        async for chunk in communicate.stream():
+            if chunk["type"] == "audio":
+                file.write(chunk["data"])
+                if "data" in chunk:  # Check if the "data" key exists
+                    pbar.update(len(chunk["data"]))  # Update the progress bar
+            elif chunk["type"] == "WordBoundary":
+                submaker.create_sub((chunk["offset"], chunk["duration"]), chunk["text"])
+    pbar.close()
+    with open(WEBVTT_FILE, "w", encoding="utf-8") as file:
+        file.write(submaker.generate_subs())
+
+if __name__ == "__main__":
+    asyncio.run(amain())
+
+# Load your audio file
+print(f"Loading audio file: {NAME}.mp3")
+audio = AudioFileClip(audio_dir + NAME + ".mp3")  # type: ignore
+
+images = [img for img in os.listdir(images_dir) if img.endswith(('.png', '.jpg', '.jpeg'))]
+
+# Randomize the order of the images
+random.shuffle(images)
+
+clips = []
+for image in images:
+    image_path = os.path.join(images_dir, image)
+    clip = ImageClip(image_path)  # type: ignore
+    clip = clip.set_duration(audio.duration / len(images))  # Set duration for each clip
+    clips.append(clip)
+
+# Concatenate images and set the duration of each image to the duration of the audio divided by the number of images
+concat_clip = concatenate_videoclips(clips)  # type: ignore
+
+# Combine audio and images
+video = concat_clip.set_audio(audio)
+
+# Write the result to a file
+print("Writing video file...")
+video.write_videofile(out_path + NAME + ".mp4", fps=fps)  # fps specifies the frames per second
+print("Finished writing video file.")
+
+# Define the source file and destination path
+source_file = audio_dir + NAME + ".vtt"
+destination_file = out_path + NAME + ".vtt"
+
+# Use the os.rename function to move the file and delete them
+os.rename(source_file, destination_file)
+# os.unlink(OUTPUT_FILE)
+# os.unlink(WEBVTT_FILE)
