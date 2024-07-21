@@ -34,12 +34,13 @@ with open('../Text/output.txt', 'r') as file:
 if not TEXT.strip():
     raise ValueError("The file is empty.")
 
-TEXT = TEXT.replace('Save Bookmark', ' ')
-TEXT = TEXT.replace('front pagePC versionbookshelf', ' ')
-TEXT = TEXT.replace('returnfront page', ' ')
-TEXT = TEXT.replace('Turn off the lightsEye protection', ' ')
-TEXT = TEXT.replace('TraditionalbigmiddleSmall', ' ')
-TEXT = TEXT.replace('My grandpa rebelled in another world, and I am invincible in the city!', ' ')
+# TEXT = TEXT.replace('Save Bookmark', ' ')
+# TEXT = TEXT.replace('front pagePC versionbookshelf', ' ')
+# TEXT = TEXT.replace('returnfront page', ' ')
+# TEXT = TEXT.replace('Turn off the lightsEye protection', ' ')
+# TEXT = TEXT.replace('TraditionalbigmiddleSmall', ' ')
+# TEXT = TEXT.replace('My grandpa rebelled in another world, and I am invincible in the city!', ' ')
+
 TEXT = TEXT.replace('\n', ' ')
 TEXT = TEXT.replace('"', "'")
 TEXT = re.sub(' +', ' ', TEXT)

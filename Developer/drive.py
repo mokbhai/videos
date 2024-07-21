@@ -32,8 +32,8 @@ def main():
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists('drive.pickle'):
+        with open('drive.pickle', 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -44,25 +44,26 @@ def main():
                 CLIENT_SECRETS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open('drive.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
     # Call the Drive v3 API
     service = build('drive', 'v3', credentials=creds)
 
     file_name = input("File name: ")
+    type = int(input("1 for video, 2 for audio: "))
     
     # Upload a video file
-    file_metadata = {'name': file_name, 'mimeType': 'video/mp4'}
+    if type == 1:
+        file_metadata = {'name': file_name, 'mimeType': 'video/mp4'}
+        media = TqdmUploadCallback('../Videos/' + file_name, mimetype='video/mp4', resumable=True)
 
-    # file_metadata = {'name': 'every-one-has-4-skills.mp3', 'mimeType': 'audio/mpeg'}
-    
+    elif type == 2:
+        file_metadata = {'name': file_name, 'mimeType': 'audio/mpeg'}
+        media = TqdmUploadCallback('../Audio/' + file_name, mimetype='audio/mpeg', resumable=True)
+
+
     # file_metadata = {'name': '8.png', 'mimeType': 'image/png'}
-
-    media = TqdmUploadCallback('../Videos/' + file_name, mimetype='video/mp4', resumable=True)
-
-    # media = TqdmUploadCallback('../Audio/every-one-has-4-skills.mp3', mimetype='audio/mpeg', resumable=True)
-
     # media = TqdmUploadCallback('../Images/8.png', mimetype='image/png', resumable=True)
 
 
