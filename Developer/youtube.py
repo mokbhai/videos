@@ -5,9 +5,9 @@ from googleapiclient.http import MediaFileUpload # type: ignore
 from google_auth_oauthlib.flow import InstalledAppFlow # type: ignore
 from googleapiclient.errors import HttpError
 from requests import Request # type: ignore
+from google.auth.transport.requests import Request
 
 VIDEO_FILE = "4skills"
-chapters = "every-one-has-4-skills p1"
 CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
