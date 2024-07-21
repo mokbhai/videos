@@ -5,6 +5,7 @@ from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from tqdm import tqdm
+import mimetypes
 
 # Define the scopes
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
@@ -20,6 +21,11 @@ class TqdmUploadCallback(MediaFileUpload):
 
     def __del__(self):
         self.progressbar.close()
+
+
+def get_file_type(file_path):
+    return mimetypes.guess_type(file_path)[0]
+
 
 def main():
     creds = None
@@ -44,14 +50,16 @@ def main():
     # Call the Drive v3 API
     service = build('drive', 'v3', credentials=creds)
 
+    file_name = input("File name: ")
+    
     # Upload a video file
-    file_metadata = {'name': 'every-one-has-4-skills.mp4', 'mimeType': 'video/mp4'}
+    file_metadata = {'name': file_name, 'mimeType': 'video/mp4'}
 
     # file_metadata = {'name': 'every-one-has-4-skills.mp3', 'mimeType': 'audio/mpeg'}
     
     # file_metadata = {'name': '8.png', 'mimeType': 'image/png'}
 
-    media = TqdmUploadCallback('../Videos/every-one-has-4-skills.mp4', mimetype='video/mp4', resumable=True)
+    media = TqdmUploadCallback('../Videos/' + file_name, mimetype='video/mp4', resumable=True)
 
     # media = TqdmUploadCallback('../Audio/every-one-has-4-skills.mp3', mimetype='audio/mpeg', resumable=True)
 

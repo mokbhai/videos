@@ -6,7 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow # type: ignore
 from googleapiclient.errors import HttpError
 from requests import Request # type: ignore
 
-VIDEO_FILE = "every-one-has-4-skills"
+VIDEO_FILE = "test"
 chapters = "every-one-has-4-skills p1"
 CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
@@ -18,9 +18,9 @@ def get_authenticated_service():
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    # if os.path.exists('token.pickle'):
-    #     with open('token.pickle', 'rb') as token:
-    #         creds = pickle.load(token)
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
