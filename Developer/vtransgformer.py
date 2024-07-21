@@ -13,7 +13,7 @@ def get_all_text_from_website(url):
             f.write(text)
     return text
 
-def get_html_responce(url):
+def get_html_response(url):
     soup = None
 
     response = requests.get(url)
@@ -96,20 +96,20 @@ chapter_index = 221
 for i in range(0, 20):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
 
-    soup = get_html_responce(url)
+    soup = get_html_response(url)
 
     text = get_text_from_specific_div(soup, "txt")
 
     while not text:
         print("No text found, in " + url + " trying again...")
-        soup = get_html_responce(url)
+        soup = get_html_response(url)
         text = get_text_from_specific_div(soup, "txt")
 
     next_url = get_link_from_id(soup, "next")
 
     while not next_url:
         print("No URL found, in " + url + " trying again...")
-        soup = get_html_responce(url)
+        soup = get_html_response(url)
         next_url = get_link_from_id(soup, "next")
 
     url = next_url
