@@ -1,4 +1,12 @@
 {
   "git.ignoreLimitWarning": true,
-  "cSpell.words": ["creds", "googleapiclient", "returnfront", "Tqdm"]
+  "cSpell.words": [
+    "argparser",
+    "creds",
+    "googleapiclient",
+    "moviepy",
+    "returnfront",
+    "Tqdm",
+    "WEBVTT"
+  ]
 }

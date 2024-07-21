@@ -6,12 +6,29 @@ from google_auth_oauthlib.flow import InstalledAppFlow # type: ignore
 from googleapiclient.errors import HttpError
 from requests import Request # type: ignore
 
-VIDEO_FILE = "test"
+VIDEO_FILE = "4skills"
 chapters = "every-one-has-4-skills p1"
 CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
-description = "aaa"
+description = """
+Awakening Destiny: Mo Xiu's Journey to the Unknown Part - 1
+
+Dive into the world of Shun City First High School where humans are bestowed with extraordinary abilities. Witness the journey of Mo Xiu, a diligent student standing on the brink of awakening his abilities. As the crucial college entrance exam looms, Mo Xiu faces not just academic challenges but also the anxiety of his impending 18th birthday - the day he either awakens his abilities or remains ordinary. Amid the pressure, an unexpected challenge from a classmate brings about a surprising revelation. Watch the story unfold as Mo Xiu navigates through his extraordinary journey towards his destiny. Don't miss out on the full story, subscribe now!
+
+Playlist: https://www.youtube.com/playlist?list=PL_W6A9WF_sWjWb8F_0KQYxHUT7ooajKOX
+
+If You Need Subtitles, Please Turn on the CC Subtitles in the Lower Right Corner, Enjoy :)
+
+Tags:
+#animerecap #manhwaedit #anime #animerecommendations #manhwarecommendation #manga #mangaunboxing #mangacollection #webtoon #manhwarecap #anime #animerecap 
+
+Copyright Notice
+⚠️ COPYRIGHT NOTICE: All content in this video is the property of MokbhaiMJ. Unauthorized use, reproduction, or commercial display of the content is strictly prohibited without proper authorization.
+Call to Action
+Enjoy the video and don't forget to like, share, and subscribe for more anime and manga content!
+Remember, a good YouTube video description provides context about the video, includes relevant keywords to help users find your video, and encourages viewers to engage with your content.
+"""
 
 def get_authenticated_service():
     creds = None
@@ -42,13 +59,13 @@ def initialize_upload(youtube):
         part="snippet,status",
         body={
             "snippet": {
-                "title": "p1 and I am invincible in the city! | | MJ",
+                "title": "Awakening Destiny: Mo Xiu's Journey to the Unknown | | Part - 1 | | MokBhaiMJ",
                 "description": description,
                 "tags": ["#animerecap", "#manhwaedit", "#anime", "#animerecommendations", "#manhwarecommendation", "#manga", "#mangaunboxing", "#mangacollection", "#webtoon", "#manhwarecap", "#anime", "#animerecap"],
                 "categoryId": "1"
             },
             "status": {
-                "privacyStatus": "public"
+                "privacyStatus": "unlisted"
             }
         },
         media_body=media

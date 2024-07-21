@@ -87,13 +87,13 @@ def google_translate(text):
         print("Translation failed. Please try again.")
 
 # Use the function
-url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-221" # 260 comp
-chapter_index = 221
+# url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-301" # 300 comp
+# chapter_index = 301
 
-# url = "https://novellive.org/book/everyone-has-four-skills/chapter-" # 100 chapter are working
-# chapter_index = 101
+url = "https://novellive.org/book/everyone-has-four-skills/chapter-1" # 50 chapter are working
+chapter_index = 1
 
-for i in range(0, 20):
+for i in range(0, 50):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
 
     soup = get_html_response(url)
