@@ -13,9 +13,19 @@ def get_all_text_from_website(url):
             f.write(text)
     return text
 
-def get_text_from_specific_div(url, div_class):
+def get_html_responce(url):
+    soup = None
+
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
+
+    while (not soup) or (soup == None):    
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+    return soup
+
+def get_text_from_specific_div(soup, div_class):
 
     divs = soup.find_all('div', class_=div_class)
     text = ' '.join([div.get_text() for div in divs])
@@ -27,8 +37,18 @@ def get_text_from_specific_div(url, div_class):
     with open('../Text/output.txt', 'a') as f:
         f.write(text)
 
-    return text
-
+    if text:
+        return text
+    else:
+        return None
+    
+def get_link_from_id(soup, id_value):
+    element = soup.find(id=id_value)
+    
+    if element:
+        return element.get('href')
+    else:
+        return None
 
 def transformers_translate(text: str, model_name = "Helsinki-NLP/opus-mt-zh-en"):
     tokenizer = MarianTokenizer.from_pretrained(model_name)
@@ -66,32 +86,34 @@ def google_translate(text):
     else:
         print("Translation failed. Please try again.")
 
-# # Use the function
-# url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-"
-# text = get_all_text_from_website(url)
-# text = get_text_from_specific_div(url, "txt")
+# Use the function
+url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-221" # 260 comp
+chapter_index = 221
 
-# chapter_index = 241
+# url = "https://novellive.org/book/everyone-has-four-skills/chapter-" # 100 chapter are working
+# chapter_index = 101
 
-# for i in range(0, 20):
-#     # print("Getting txt from: ", url + str(i))
-#     idx = chapter_index + i
-#     text = get_text_from_specific_div(url + str(idx), "txt")
-#     while not text:  # Retry the iteration if no text was found
-#         print("No text found, in " + url + str(idx) + " trying again...")
-#         text = get_text_from_specific_div(url + str(idx), "txt")
-#     print(text[:14] + " done\n")
+for i in range(0, 20):
+    print("Getting Chapter: ", chapter_index + i, " From ",url)
 
-url = "https://novellive.org/book/everyone-has-four-skills/chapter-"
-chapter_index = 1
+    soup = get_html_responce(url)
 
-for i in range(0, 100):
-    # print("Getting txt from: ", url + str(i))
-    idx = str(chapter_index + i)
-    text = get_text_from_specific_div(url + idx, "txt")
-    while not text:  # Retry the iteration if no text was found
-        print("No text found, in " + url + idx + " trying again...")
-        text = get_text_from_specific_div(url + idx, "txt")
-    print("Chapter: " + idx + " done\n")
+    text = get_text_from_specific_div(soup, "txt")
+
+    while not text:
+        print("No text found, in " + url + " trying again...")
+        soup = get_html_responce(url)
+        text = get_text_from_specific_div(soup, "txt")
+
+    next_url = get_link_from_id(soup, "next")
+
+    while not next_url:
+        print("No URL found, in " + url + " trying again...")
+        soup = get_html_responce(url)
+        next_url = get_link_from_id(soup, "next")
+
+    url = next_url
+
+    print("done\n")
 
 # transformers_translate(text)

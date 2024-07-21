@@ -45,12 +45,16 @@ def main():
     service = build('drive', 'v3', credentials=creds)
 
     # Upload a video file
-    file_metadata = {'name': 'test.mp4', 'mimeType': 'video/mp4'}
+    file_metadata = {'name': 'every-one-has-4-skills.mp4', 'mimeType': 'video/mp4'}
+
+    # file_metadata = {'name': 'every-one-has-4-skills.mp3', 'mimeType': 'audio/mpeg'}
     
     # file_metadata = {'name': '8.png', 'mimeType': 'image/png'}
 
-    media = TqdmUploadCallback('../Videos/test.mp4', mimetype='video/mp4', resumable=True)
-    
+    media = TqdmUploadCallback('../Videos/every-one-has-4-skills.mp4', mimetype='video/mp4', resumable=True)
+
+    # media = TqdmUploadCallback('../Audio/every-one-has-4-skills.mp3', mimetype='audio/mpeg', resumable=True)
+
     # media = TqdmUploadCallback('../Images/8.png', mimetype='image/png', resumable=True)
 
 

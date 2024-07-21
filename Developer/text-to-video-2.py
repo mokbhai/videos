@@ -1,4 +1,4 @@
-fps = 24
+fps = 6
 
 audio_dir = "../Audio/"
 images_dir = "../Images/imgs/"
