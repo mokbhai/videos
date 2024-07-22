@@ -4,16 +4,26 @@ from bs4 import BeautifulSoup # type: ignore
 from googletrans import Translator # type: ignore
 import spacy # type: ignore
 import textwrap # type: ignore
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.safari.webdriver import WebDriver # import Safari WebDriver
+import time
 
-def get_all_text_from_website(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    text = soup.get_text()
-    with open('../Text/output.txt', 'a') as f:
-            f.write(text)
-    return text
+def get_html_response(url): 
+    return get_html_response_selenium(url)
 
-def get_html_response(url):
+def get_html_response_selenium(url):
+    # options = Options()
+    # options.headless = True
+    # driver = webdriver.Chrome(options=options)
+    driver = WebDriver()
+    driver.get(url)
+    # time.sleep(5)  
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    driver.quit()
+    return soup
+
+def get_html_response_BeautifulSoup(url):
     soup = None
 
     response = requests.get(url)
@@ -25,14 +35,29 @@ def get_html_response(url):
 
     return soup
 
+def get_all_text_from_website(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    text = soup.get_text()
+    with open('../Text/output.txt', 'a') as f:
+            f.write(text)
+    return text
+
 def get_text_from_specific_div(soup, div_class):
 
     divs = soup.find_all('div', class_=div_class)
     text = ' '.join([div.get_text() for div in divs])
-
-    text = text.replace('Thank you so much!', "")
+    text = text.strip()
     text = text.replace('Translator: Atlas Studios Editor: Atlas Studios', "")
     text = text.replace('Visit and read more novel to help us update chapter quickly.', "")
+    text = text.replace("\n\n", " ")
+    text = text.replace("Settings Night Mode :", "")
+    text = text.replace("« PrevNext » ≡ Table of Contents", "")
+    text = text.replace("RAW :", "")
+    text = text.replace("Saving, please wait...", "")
+    text = text.replace("Settings saved..", "")
+    text = text.replace(" Close *You must login to use RAW feature and save the settings permanently.", "")
+    text = text.replace("Font size : \n16", "")
 
     with open('../Text/output.txt', 'a') as f:
         f.write(text)
@@ -44,6 +69,16 @@ def get_text_from_specific_div(soup, div_class):
     
 def get_link_from_id(soup, id_value):
     element = soup.find(id=id_value)
+    if element:
+        return element.get('href')
+    element = soup.find('a', class_=id_value)
+    if element:
+        return element.get('href')
+    else:
+        return None
+    
+def get_link_from_class(soup, class_value):
+    element = soup.find('a', class_=class_value)
     
     if element:
         return element.get('href')
@@ -87,23 +122,27 @@ def google_translate(text):
         print("Translation failed. Please try again.")
 
 # Use the function
-url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-321" # 320 comp
-chapter_index = 321
+# url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-321" # 320 comp
+# chapter_index = 321
 
-# url = "https://novellive.org/book/everyone-has-four-skills/chapter-1" # 50 chapter are working
-# chapter_index = 1
+# url = "https://novellive.org/book/everyone-has-four-skills/chapter-51-chapter-51-the-willing-take-the-bait-1" # 50 chapter are working
+# url = "https://www.mtlnovel.com/four-skills-for-all/chapter-51-serious-clubs-have-tasks/" # 100 chapter are working
+# chapter_index = 101
 
-for i in range(0, 20):
+for i in range(0, 50):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
 
     soup = get_html_response(url)
-
-    text = get_text_from_specific_div(soup, "txt")
+    
+    # with open('../Text/index.html', 'w') as f:
+    #     f.write(str(soup))
+    
+    text = get_text_from_specific_div(soup, "post-content")
 
     while not text:
         print("No text found, in " + url + " trying again...")
         soup = get_html_response(url)
-        text = get_text_from_specific_div(soup, "txt")
+        text = get_text_from_specific_div(soup, "post-content")
 
     next_url = get_link_from_id(soup, "next")
 
