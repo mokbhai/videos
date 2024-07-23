@@ -7,7 +7,7 @@ from googleapiclient.errors import HttpError
 from requests import Request # type: ignore
 from google.auth.transport.requests import Request
 
-VIDEO_FILE = "4skills"
+VIDEO_FILE = "561-6000-granpa"
 CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
@@ -59,10 +59,11 @@ def initialize_upload(youtube):
         part="snippet,status",
         body={
             "snippet": {
-                "title": "Awakening Destiny: Mo Xiu's Journey to the Unknown | | Part - 1 | | MokBhaiMJ",
+                "title": VIDEO_FILE,
                 "description": description,
                 "tags": ["#animerecap", "#manhwaedit", "#anime", "#animerecommendations", "#manhwarecommendation", "#manga", "#mangaunboxing", "#mangacollection", "#webtoon", "#manhwarecap", "#anime", "#animerecap"],
-                "categoryId": "1"
+                "categoryId": "1",
+                "defaultLanguage": "en"
             },
             "status": {
                 "privacyStatus": "unlisted"
@@ -70,6 +71,7 @@ def initialize_upload(youtube):
         },
         media_body=media
     )
+
     response = None
     while response is None:
         try:
@@ -80,6 +82,27 @@ def initialize_upload(youtube):
             print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
     print("Upload Complete!")
     print(response)
+    
+    video_id = response['id']  # Extract video ID from the response
+    
+    # Create a MediaFileUpload object for the subtitle file
+    subtitle_media = MediaFileUpload("../Videos/" + VIDEO_FILE + ".vtt", mimetype='text/vtt', resumable=True)  # VTT subtitle file
+    
+    # Add subtitles to the video
+    request = youtube.captions().insert(
+        part="snippet",
+        body={
+            "snippet": {
+                "videoId": video_id,  # Use the video ID from the response
+                "language": "en",
+                "name": "English subtitles",
+                "videoSnippet": {
+                    "categoryId": "1"
+                }
+            }
+        },
+        media_body=subtitle_media  # Use the subtitle MediaFileUpload object
+    )
 
 if __name__ == '__main__':
     youtube = get_authenticated_service()

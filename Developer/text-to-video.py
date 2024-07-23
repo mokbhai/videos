@@ -1,7 +1,7 @@
-fps = 24
+fps = 6
 
 audio_dir = "../Audio/"
-images_dir = "../Images/"
+images_dir = "../Images/imgs/"
 out_path = "../Videos/"
 
 import argparse
@@ -43,7 +43,7 @@ TEXT = TEXT.replace('\n', ' ')
 TEXT = TEXT.replace('"', "'")
 TEXT = re.sub(' +', ' ', TEXT)
 
-VOICE = "en-CA-LiamNeural"
+VOICE = "en-US-GuyNeural"
 
 OUTPUT_FILE = audio_dir + NAME + ".mp3"
 WEBVTT_FILE = audio_dir + NAME + ".vtt"
@@ -104,5 +104,5 @@ destination_file = out_path + NAME + ".vtt"
 
 # Use the os.rename function to move the file and delete them
 os.rename(source_file, destination_file)
-os.unlink(OUTPUT_FILE)
-os.unlink(WEBVTT_FILE)
+# os.unlink(OUTPUT_FILE)
+# os.unlink(WEBVTT_FILE)

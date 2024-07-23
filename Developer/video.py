@@ -2,11 +2,11 @@ from moviepy.editor import * # type: ignore
 import random
 import os
 
-audioFile =  "161"
-fps = 12
+audioFile =  "561-6000-granpa"
+fps = 3
 
 audio_dir = "../Audio/"
-images_dir = "../Images/"
+images_dir = "../Images/imgs/"
 out_path = "../Videos/"
 
 # Load your audio file

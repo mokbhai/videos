@@ -45,7 +45,7 @@ TEXT = TEXT.replace('\n', ' ')
 TEXT = TEXT.replace('"', "'")
 TEXT = re.sub(' +', ' ', TEXT)
 
-VOICE = "en-CA-LiamNeural"
+VOICE = "en-US-GuyNeural"
 
 OUTPUT_FILE = audio_dir + NAME + ".mp3"
 WEBVTT_FILE = audio_dir + NAME + ".vtt"
