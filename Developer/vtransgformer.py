@@ -9,16 +9,19 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.safari.webdriver import WebDriver # import Safari WebDriver
 import time
 
-def get_html_response(url): 
-    return get_html_response_selenium(url)
+output_file = '../Text/output.txt'
 
-def get_html_response_selenium(url):
+def get_html_response(url): 
+    return get_html_response_selenium(url, delay=0)
+    # return get_html_response_BeautifulSoup(url)
+
+def get_html_response_selenium(url, delay=10):
     # options = Options()
     # options.headless = True
     # driver = webdriver.Chrome(options=options)
     driver = WebDriver()
     driver.get(url)
-    # time.sleep(5)  
+    time.sleep(delay)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
     return soup
@@ -39,18 +42,31 @@ def get_all_text_from_website(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     text = soup.get_text()
-    with open('../Text/output.txt', 'a') as f:
+    with open(output_file, 'a') as f:
             f.write(text)
     return text
 
-def get_text_from_specific_div(soup, div_class):
-
-    divs = soup.find_all('div', class_=div_class)
+def get_text_from_specific_div(soup, div_class=None, div_id=None, translate=0):
+    
+    divs = ""
+    if div_class:
+        divs = soup.find_all('div', class_=div_class)
+    elif div_id:
+        divs = soup.find_all('div', id=div_id)
+    else:
+        return None
+    
     text = ' '.join([div.get_text() for div in divs])
     text = text.strip()
+    
+    if "转码失败,请重试!" in text:
+        return None
+    if "正在为您转码" in text or "最新网址" in text:
+        return None
+
     text = text.replace('Translator: Atlas Studios Editor: Atlas Studios', "")
     text = text.replace('Visit and read more novel to help us update chapter quickly.', "")
-    text = text.replace("\n\n", " ")
+    # text = text.replace("\n\n", " ")
     text = text.replace("Settings Night Mode :", "")
     text = text.replace("« PrevNext » ≡ Table of Contents", "")
     text = text.replace("RAW :", "")
@@ -58,10 +74,16 @@ def get_text_from_specific_div(soup, div_class):
     text = text.replace("Settings saved..", "")
     text = text.replace(" Close *You must login to use RAW feature and save the settings permanently.", "")
     text = text.replace("Font size : \n16", "")
-
-    with open('../Text/output.txt', 'a') as f:
-        f.write(text)
-
+    # text = text.replace("最新网址：www.xiaoshubao.net", " ")
+    text = text.replace("Latest website: www.xiaoshubao.net", " ")
+    text = text.replace("This chapter is not yet finished, click the next page to continue reading", " ")
+    text = text.replace("<-->>", " ")
+    text = text.replace("br>", " ")
+    # text = text.replace("<-->>本章未完，点击下一页继续阅读", " ")
+    
+    if (translate == 1): 
+        return google_translate(text)
+        
     if text:
         return text
     else:
@@ -90,15 +112,20 @@ def transformers_translate(text: str, model_name = "Helsinki-NLP/opus-mt-zh-en")
     model = MarianMTModel.from_pretrained(model_name)
     # Split the text into chunks of 100 characters each
     chunks = textwrap.wrap(text, 100)
+    translated_text = ""
 
     for chunk in chunks:
         inputs = tokenizer(chunk, return_tensors="pt")
         translated = model.generate(**inputs)
         tgt_text = [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
         # Save the translated text
-        with open('transformers_text.txt', 'a') as f:
-            f.write(tgt_text[0])
+        translated_text += tgt_text[0]
 
+    if translated_text:
+            return translated_text
+    else:
+        return None
+        
 def spacy_translate(text: str, model_name = "zh_core_web_sm"): 
     # Load the spacy model for Chinese to English translation
     nlp = spacy.load(model_name)
@@ -116,17 +143,24 @@ def google_translate(text):
     translated = translator.translate(text, dest='en')
     if translated and translated.text:
         translated_text = translated.text
-        with open('google_text.txt', 'a') as f:
-            f.write(translated_text)
+        return translated_text
     else:
-        print("Translation failed. Please try again.")
+        return None
 
 # Use the function
-# url = "https://novellive.org/book/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-321" # 320 comp
-# chapter_index = 321
+url = "https://m-xiaoshubao-net.translate.goog/read/385636/23.html?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp" # 320 comp
+base_url = "https://m.xiaoshubao.net"
+text_class = ""
+text_id = "BookText"
+next_class = "pb_next"
+translate = 0
+chapter_index = 52
 
 # url = "https://novellive.org/book/everyone-has-four-skills/chapter-51-chapter-51-the-willing-take-the-bait-1" # 50 chapter are working
 # url = "https://www.mtlnovel.com/four-skills-for-all/chapter-51-serious-clubs-have-tasks/" # 100 chapter are working
+# text_class = "post-content"
+# text_id = ""
+# next_class = "next"
 # chapter_index = 101
 
 for i in range(0, 50):
@@ -137,22 +171,27 @@ for i in range(0, 50):
     # with open('../Text/index.html', 'w') as f:
     #     f.write(str(soup))
     
-    text = get_text_from_specific_div(soup, "post-content")
+    text = get_text_from_specific_div(soup, div_class=text_class, div_id=text_id, translate=translate)
 
     while not text:
         print("No text found, in " + url + " trying again...")
         soup = get_html_response(url)
-        text = get_text_from_specific_div(soup, "post-content")
+        text = get_text_from_specific_div(soup, div_class=text_class, div_id=text_id, translate=translate)
+    
+    with open(output_file, 'a') as f:
+        f.write("\nChapter: " + str(chapter_index + i) + "\n" + text)
 
-    next_url = get_link_from_id(soup, "next")
+    next_url = get_link_from_id(soup, next_class)
 
     while not next_url:
         print("No URL found, in " + url + " trying again...")
         soup = get_html_response(url)
-        next_url = get_link_from_id(soup, "next")
+        next_url = get_link_from_id(soup, next_class)
+   
+    if not next_url.startswith('http'):
+        next_url = base_url + next_url
 
     url = next_url
+ 
+    print("done\n" + "next -> " + url)
 
-    print("done\n")
-
-# transformers_translate(text)

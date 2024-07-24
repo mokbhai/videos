@@ -7,7 +7,7 @@ from googleapiclient.errors import HttpError
 from requests import Request # type: ignore
 from google.auth.transport.requests import Request
 
-VIDEO_FILE = "561-6000-granpa"
+VIDEO_FILE = "601-631-grandpa-completed"
 CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 

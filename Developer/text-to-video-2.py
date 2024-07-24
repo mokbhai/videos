@@ -41,9 +41,9 @@ if not TEXT.strip():
 # TEXT = TEXT.replace('TraditionalbigmiddleSmall', ' ')
 # TEXT = TEXT.replace('My grandpa rebelled in another world, and I am invincible in the city!', ' ')
 
-TEXT = TEXT.replace('\n', ' ')
+# TEXT = TEXT.replace('\n', ' ')
 TEXT = TEXT.replace('"', "'")
-TEXT = re.sub(' +', ' ', TEXT)
+# TEXT = re.sub(' +', ' ', TEXT)
 
 VOICE = "en-US-GuyNeural"
 
