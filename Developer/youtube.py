@@ -7,16 +7,17 @@ from googleapiclient.errors import HttpError
 from requests import Request # type: ignore
 from google.auth.transport.requests import Request
 
-VIDEO_FILE = "601-631-grandpa-completed"
+VIDEO_FILE = "son-p3_with_subtitles"
 CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
 description = """
 Awakening Destiny: Mo Xiu's Journey to the Unknown Part - 1
 
-Dive into the world of Shun City First High School where humans are bestowed with extraordinary abilities. Witness the journey of Mo Xiu, a diligent student standing on the brink of awakening his abilities. As the crucial college entrance exam looms, Mo Xiu faces not just academic challenges but also the anxiety of his impending 18th birthday - the day he either awakens his abilities or remains ordinary. Amid the pressure, an unexpected challenge from a classmate brings about a surprising revelation. Watch the story unfold as Mo Xiu navigates through his extraordinary journey towards his destiny. Don't miss out on the full story, subscribe now!
+In the face of impending death, an ordinary man chooses an extraordinary path. 'The Unlikely Exorcist: A Countdown to Immortality' is a riveting tale of a terminally ill patient who, instead of succumbing to his fate, embarks on a thrilling journey of exorcism and immortal punishment. Not driven by a noble cause or the desire to protect his country, but lured by the irresistible temptation of risk salary and compensation. As he navigates through this uncharted territory, he encounters a world beyond his wildest imagination. Will he defy the odds and cheat death? Or will he become another pawn in the game of immortality? Dive into this captivating saga to uncover the truth.
+This new title and description aim to pique the curiosity of potential readers by highlighting the unique premise of the story and the protagonist's unusual motivation. The description also poses questions that readers might be eager to find the answers to, further encouraging them to read the book.
 
-Playlist: https://www.youtube.com/playlist?list=PL_W6A9WF_sWjWb8F_0KQYxHUT7ooajKOX
+Playlist: 
 
 If You Need Subtitles, Please Turn on the CC Subtitles in the Lower Right Corner, Enjoy :)
 
@@ -59,7 +60,7 @@ def initialize_upload(youtube):
         part="snippet,status",
         body={
             "snippet": {
-                "title": VIDEO_FILE,
+                "title": "The Unlikely Exorcist: A Countdown to Immortality",
                 "description": description,
                 "tags": ["#animerecap", "#manhwaedit", "#anime", "#animerecommendations", "#manhwarecommendation", "#manga", "#mangaunboxing", "#mangacollection", "#webtoon", "#manhwarecap", "#anime", "#animerecap"],
                 "categoryId": "1",
@@ -83,26 +84,27 @@ def initialize_upload(youtube):
     print("Upload Complete!")
     print(response)
     
-    video_id = response['id']  # Extract video ID from the response
+    # video_id = response['id']  # Extract video ID from the response
     
-    # Create a MediaFileUpload object for the subtitle file
-    subtitle_media = MediaFileUpload("../Videos/" + VIDEO_FILE + ".vtt", mimetype='text/vtt', resumable=True)  # VTT subtitle file
+    # # Create a MediaFileUpload object for the subtitle file
+    # subtitle_media = MediaFileUpload("../Videos/" + VIDEO_FILE + ".vtt", mimetype='text/vtt', resumable=True)  # VTT subtitle file
     
-    # Add subtitles to the video
-    request = youtube.captions().insert(
-        part="snippet",
-        body={
-            "snippet": {
-                "videoId": video_id,  # Use the video ID from the response
-                "language": "en",
-                "name": "English subtitles",
-                "videoSnippet": {
-                    "categoryId": "1"
-                }
-            }
-        },
-        media_body=subtitle_media  # Use the subtitle MediaFileUpload object
-    )
+    # # Add subtitles to the video
+    # request = youtube.captions().insert(
+    #     part="snippet",
+    #     body={
+    #         "snippet": {
+    #             "videoId": video_id,  # Use the video ID from the response
+    #             "language": "en",
+    #             "name": "English subtitles",
+    #             "videoSnippet": {
+    #                 "categoryId": "1"
+    #             },
+    #             "selfDeclaredMadeForKids": "No"
+    #         }
+    #     },
+    #     media_body=subtitle_media  # Use the subtitle MediaFileUpload object
+    # )
 
 if __name__ == '__main__':
     youtube = get_authenticated_service()

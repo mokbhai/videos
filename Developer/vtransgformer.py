@@ -21,7 +21,7 @@ def get_html_response_selenium(url, delay=10):
     # driver = webdriver.Chrome(options=options)
     driver = WebDriver()
     driver.get(url)
-    time.sleep(delay)
+    # time.sleep(delay)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
     return soup
@@ -66,7 +66,7 @@ def get_text_from_specific_div(soup, div_class=None, div_id=None, translate=0):
 
     text = text.replace('Translator: Atlas Studios Editor: Atlas Studios', "")
     text = text.replace('Visit and read more novel to help us update chapter quickly.', "")
-    # text = text.replace("\n\n", " ")
+    text = text.replace("\n\n", " ")
     text = text.replace("Settings Night Mode :", "")
     text = text.replace("« PrevNext » ≡ Table of Contents", "")
     text = text.replace("RAW :", "")
@@ -148,20 +148,29 @@ def google_translate(text):
         return None
 
 # Use the function
-url = "https://m-xiaoshubao-net.translate.goog/read/385636/23.html?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp" # 320 comp
-base_url = "https://m.xiaoshubao.net"
-text_class = ""
-text_id = "BookText"
-next_class = "pb_next"
-translate = 0
-chapter_index = 52
+# url = "https://m-xiaoshubao-net.translate.goog/read/385636/23.html?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp" # 320 comp
+# base_url = "https://m.xiaoshubao.net"
+# text_class = ""
+# text_id = "BookText"
+# next_class = "pb_next"
+# translate = 0
+# chapter_index = 52
 
-# url = "https://novellive.org/book/everyone-has-four-skills/chapter-51-chapter-51-the-willing-take-the-bait-1" # 50 chapter are working
-# url = "https://www.mtlnovel.com/four-skills-for-all/chapter-51-serious-clubs-have-tasks/" # 100 chapter are working
+# url = "https://www.mtlnovel.com/four-skills-for-all/chapter-51-serious-clubs-have-tasks/" # 100 chapter are done
+# base_url = "https://www.mtlnovel.com"
 # text_class = "post-content"
 # text_id = ""
 # next_class = "next"
+# translate = 0
 # chapter_index = 101
+
+url = "https://www.mtlnovel.com/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-361-life-evil/" # 100 chapter are done
+base_url = "https://www.mtlnovel.com"
+text_class = "par fontsize-16"
+text_id = ""
+next_class = "next"
+translate = 0
+chapter_index = 361
 
 for i in range(0, 50):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
@@ -178,8 +187,11 @@ for i in range(0, 50):
         soup = get_html_response(url)
         text = get_text_from_specific_div(soup, div_class=text_class, div_id=text_id, translate=translate)
     
+    # with open(output_file, 'a') as f:
+    #     f.write("\nChapter: " + str(chapter_index + i) + "\n" + text)
+    
     with open(output_file, 'a') as f:
-        f.write("\nChapter: " + str(chapter_index + i) + "\n" + text)
+        f.write("\n" + text)
 
     next_url = get_link_from_id(soup, next_class)
 

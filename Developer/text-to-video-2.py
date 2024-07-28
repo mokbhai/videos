@@ -14,6 +14,7 @@ from moviepy.editor import *
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
 from itertools import cycle
+import ffmpeg
 
 if not os.path.exists(audio_dir):
     os.makedirs(audio_dir)
@@ -27,7 +28,7 @@ args = parser.parse_args()
 
 NAME = args.name
 
-with open('../Text/output.txt', 'r') as file:
+with open('../Text/data.txt', 'r') as file:
     TEXT = file.read()
 
 # Check if the text is empty
@@ -43,7 +44,8 @@ if not TEXT.strip():
 
 # TEXT = TEXT.replace('\n', ' ')
 TEXT = TEXT.replace('"', "'")
-# TEXT = re.sub(' +', ' ', TEXT)
+TEXT = TEXT.replace(',', "")
+TEXT = re.sub(' +', ' ', TEXT)
 
 VOICE = "en-US-GuyNeural"
 
@@ -119,3 +121,9 @@ destination_file = out_path + NAME + ".vtt"
 os.rename(source_file, destination_file)
 # os.unlink(OUTPUT_FILE)
 # os.unlink(WEBVTT_FILE)
+
+input_file = out_path + NAME + ".mp4"
+output_file = out_path + NAME + "_with_subtitles.mp4"
+subtitle_file = out_path + NAME + ".vtt"
+
+ffmpeg.input(input_file).output(output_file, vf='subtitles=' + subtitle_file + ':force_style=\'Alignment=10,PrimaryColour=&H000FFFFF\'').run()
