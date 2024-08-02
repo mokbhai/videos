@@ -28,7 +28,7 @@ args = parser.parse_args()
 
 NAME = args.name
 
-with open('../Text/output.txt', 'r') as file:
+with open('../Text/data.txt', 'r') as file:
     TEXT = file.read()
 
 # Check if the text is empty

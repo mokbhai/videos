@@ -2,11 +2,13 @@
   "git.ignoreLimitWarning": true,
   "cSpell.words": [
     "argparser",
+    "Colour",
     "creds",
     "googleapiclient",
     "moviepy",
     "returnfront",
     "Tqdm",
+    "videoclips",
     "WEBVTT"
   ]
 }

@@ -21,7 +21,7 @@ def get_html_response_selenium(url, delay):
     driver = webdriver.Chrome(options=options)
     # driver = WebDriver()
     driver.get(url)
-    time.sleep(delay)
+    # time.sleep(delay)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
     return soup
@@ -66,7 +66,7 @@ def get_text_from_specific_div(soup, div_class=None, div_id=None, translate=0):
 
     text = text.replace('Translator: Atlas Studios Editor: Atlas Studios', "")
     text = text.replace('Visit and read more novel to help us update chapter quickly.', "")
-    text = text.replace("\n\n", " ")
+    # text = text.replace("\n\n", " ")
     text = text.replace("Settings Night Mode :", "")
     text = text.replace("« PrevNext » ≡ Table of Contents", "")
     text = text.replace("RAW :", "")
@@ -156,45 +156,13 @@ def google_translate(text):
 # translate = 0
 # chapter_index = 52
 
-# url = "https://www.mtlnovel.com/four-skills-for-all/chapter-51-serious-clubs-have-tasks/" # 100 chapter are done
-# base_url = "https://www.mtlnovel.com"
-# text_class = "par fontsize-16"
+# url = "https://novellive.org/book/everyone-has-four-skills/chapter-51-chapter-51-the-willing-take-the-bait-1" # 50 chapter are working
+# url = "https://www.mtlnovel.com/four-skills-for-all/chapter-51-serious-clubs-have-tasks/" # 100 chapter are working
+# text_class = "post-content"
 # text_id = ""
 # next_class = "next"
 # translate = 0
 # chapter_index = 101
-
-url = "https://www.mtlnovel.com/junior-sisters-cultivation-method-is-unscientific/chapter-101-first-round/" # 100 chapter are done
-base_url = "https://www.mtlnovel.com"
-text_class = "par fontsize-16"
-text_id = ""
-next_class = "next"
-translate = 0
-chapter_index = 101
-
-# url = "https://www.mtlnovel.com/80-years-of-signing-in-at-the-cold-palace-i-am-unrivalled/chapter-361-life-evil/" # 100 chapter are done
-# base_url = "https://www.mtlnovel.com"
-# text_class = "par fontsize-16"
-# text_id = ""
-# next_class = "next"
-# translate = 0
-# chapter_index = 361
-
-# url = "https://www.uuks.org/b/14305/178812.html" # 100 chapter are done
-# base_url = "https://www.uuks.org"
-# text_class = "contentbox"
-# text_id = ""
-# next_class = "next"
-# translate = 1
-# chapter_index = 361
-
-url = "https://www.jjwxc.net/onebook.php?novelid=1675875&chapterid=1" # 100 chapter are done
-base_url = "https://www.jjwxc.net/onebook.php?novelid=1675875&chapterid="
-text_class = "novelbody"
-text_id = ""
-next_class = "bi"
-translate = 0
-chapter_index = 1
 
 for i in range(0, 50):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
