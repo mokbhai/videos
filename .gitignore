@@ -5,5 +5,5 @@ lib
 **.mp3
 **.vtt
 **.srt
-**.gif
+/Gifs/**
 **.pickle

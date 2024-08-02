@@ -1,7 +1,7 @@
 fps = 6
 
 audio_dir = "../Audio/"
-images_dir = "../Images/imgs/"
+images_dir = "../Images/1/"
 out_path = "../Videos/"
 
 import argparse
@@ -14,6 +14,7 @@ from moviepy.editor import *
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
 from itertools import cycle
+import ffmpeg
 
 if not os.path.exists(audio_dir):
     os.makedirs(audio_dir)
@@ -43,7 +44,8 @@ if not TEXT.strip():
 
 # TEXT = TEXT.replace('\n', ' ')
 TEXT = TEXT.replace('"', "'")
-# TEXT = re.sub(' +', ' ', TEXT)
+TEXT = TEXT.replace(',', "")
+TEXT = re.sub(' +', ' ', TEXT)
 
 VOICE = "en-US-GuyNeural"
 
@@ -77,7 +79,7 @@ audio = AudioFileClip(audio_dir + NAME + ".mp3")  # type: ignore
 images = [img for img in os.listdir(images_dir) if img.endswith(('.png', '.jpg', '.jpeg'))]
 
 # Randomize the order of the images
-random.shuffle(images)
+# random.shuffle(images)
 
 def process_image(image_path):
     clip = ImageClip(image_path)  # type: ignore
@@ -119,3 +121,9 @@ destination_file = out_path + NAME + ".vtt"
 os.rename(source_file, destination_file)
 # os.unlink(OUTPUT_FILE)
 # os.unlink(WEBVTT_FILE)
+
+input_file = out_path + NAME + ".mp4"
+output_file = out_path + NAME + "_with_subtitles.mp4"
+subtitle_file = out_path + NAME + ".vtt"
+
+ffmpeg.input(input_file).output(output_file, vf='subtitles=' + subtitle_file + ':force_style=\'Alignment=10,PrimaryColour=&H000FFFFF\'').run()

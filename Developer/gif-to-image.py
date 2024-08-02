@@ -1,7 +1,11 @@
 from PIL import Image
 from tqdm import tqdm
+import os
 
 def gif_to_images(gif_path, output_path):
+    # Ensure the output directory exists
+    os.makedirs(output_path, exist_ok=True)
+
     frame = Image.open(gif_path)
     nframes = 0
     total_frames = frame.n_frames
@@ -16,7 +20,8 @@ def gif_to_images(gif_path, output_path):
                 break
     return True
 
-gif = "../Gif/" + "1.gif"
+
+gif = "../Gifs/" + "1.gif"
 out = "../Images/" + "1"
 
 # Use the function like this:
