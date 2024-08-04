@@ -1,3 +1,4 @@
+import time
 from transformers import MarianMTModel, MarianTokenizer # type: ignore
 import requests # type: ignore
 from bs4 import BeautifulSoup # type: ignore
@@ -7,21 +8,20 @@ import textwrap # type: ignore
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.safari.webdriver import WebDriver # import Safari WebDriver
-import time
 
-output_file = '../Text/output.txt'
+output_file = '/Users/mokshitjain/Desktop/Audio/Text/output.txt'
 
 def get_html_response(url): 
-    return get_html_response_selenium(url, delay=5)
+    return get_html_response_selenium(url, delay=0)
     # return get_html_response_BeautifulSoup(url)
 
 def get_html_response_selenium(url, delay):
-    options = Options()
-    options.headless = True
-    driver = webdriver.Chrome(options=options)
-    # driver = WebDriver()
+    # options = Options()
+    # options.headless = True
+    # driver = webdriver.Chrome(options=options)
+    driver = WebDriver()
     driver.get(url)
-    # time.sleep(delay)
+    time.sleep(delay)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
     return soup
@@ -157,14 +157,22 @@ def google_translate(text):
 # chapter_index = 52
 
 # url = "https://novellive.org/book/everyone-has-four-skills/chapter-51-chapter-51-the-willing-take-the-bait-1" # 50 chapter are working
-# url = "https://www.mtlnovel.com/four-skills-for-all/chapter-51-serious-clubs-have-tasks/" # 100 chapter are working
+# base_url = "https://www.mtlnovel.com/four-skills-for-all/chapter-51-serious-clubs-have-tasks/" # 100 chapter are working
 # text_class = "post-content"
 # text_id = ""
 # next_class = "next"
 # translate = 0
 # chapter_index = 101
 
-for i in range(0, 50):
+url = "https://lightnovel.novelupdates.net/book/heavenly-dao-rankings-i-am-exposed-as-the-sword-god/chapter-241" # 0 chapter
+base_url = "https://lightnovel.novelupdates.net"
+text_class = ""
+text_id = "chr-content"
+next_class = "next_chap"
+translate = 0
+chapter_index = 241
+
+for i in range(0, 80):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
 
     soup = get_html_response(url)
@@ -185,17 +193,18 @@ for i in range(0, 50):
     with open(output_file, 'a') as f:
         f.write("\n" + text)
 
-    # next_url = get_link_from_id(soup, next_class)
+    next_url = get_link_from_id(soup, next_class)
 
-    # while not next_url:
-    #     print("No URL found, in " + url + " trying again...")
-    #     soup = get_html_response(url)
-    #     next_url = get_link_from_id(soup, next_class)
+    while not next_url:
+        print("No URL found, in " + url + " trying again...")
+        soup = get_html_response(url)
+        next_url = get_link_from_id(soup, next_class)
    
-    # if not next_url.startswith('http'):
-    #     next_url = base_url + next_url
+    if not next_url.startswith('http'):
+        next_url = base_url + next_url
 
-    url = base_url + str(chapter_index + i)
+    # url = base_url + str(chapter_index + i)
+    url = next_url
  
     print("done\n" + "next -> " + url)
 

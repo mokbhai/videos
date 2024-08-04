@@ -75,7 +75,7 @@ def get_text_from_specific_div(soup, div_class=None, div_id=None, translate=0):
     text = text.replace("  ", " ")
     # Filtering out unwanted text
     filters = [
-        "转码失败,请重试!", "正在为您转码", "最新网址", "Translator: Atlas Studios", 
+        "转码失败,请重试!", "正在为您转码", "最新网址", "Translator: Atlas StudiosEditor: Atlas Studios", "Translator: Atlas Studios", 
         "Editor: Atlas Studios", "Visit and read more novel to help us update chapter quickly.",
         "\n\n", "Settings Night Mode :", "« PrevNext » ≡ Table of Contents", "RAW :",
         "Saving, please wait...", "Settings saved..", " Close *You must login to use RAW feature and save the settings permanently.",
@@ -84,7 +84,6 @@ def get_text_from_specific_div(soup, div_class=None, div_id=None, translate=0):
         "Complaints involving minors", "Complaint about data falsification", "Report fake update", "other    Article Collection",
         "Categorize your favorite articles", "+ Added new collection category", "Added Cancel", "Customize favorite categories", "View favorites list", "↑ Back to top",
         "Open Jinjiang App and scan the QR code to read", 
-        "Support mobile phone scanning QR code reading  wap reading click: https://m.jjwxc.net/book2/1675875/", "This author currently has no tweets"
     ]
     for filter in filters:
         text = text.replace(filter, "")

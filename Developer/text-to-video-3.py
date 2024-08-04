@@ -1,4 +1,5 @@
-# ffmpeg -i inputvideo.mp4 -vf "scale=1280:720,fps=30" -c:v libx264 -crf 23 outputvideo_hd.mp4
+# ffmpeg -i 1.mp4 -vf "scale=1920:1080,fps=12" -c:v libx264 -crf 23 1_.mp4
+# ffmpeg -stream_loop 1314 -i ../canva/3_.mp4 -i ../Audio/281-300-prince.mp3 -vf "subtitles=../Videos/281-300-prince.vtt:force_style='Alignment=10,PrimaryColour=&H000FFFFF'" -map 0:v -map 1:a -c:v libx264 -crf 23 -c:a aac -shortest ../Videos/281-300-prince.mp4
 
 import argparse
 import asyncio
@@ -9,7 +10,7 @@ import os
 import subprocess
 
 # Define paths
-video_path = '../canva/outputvideo_hd.mp4'
+video_path = '../canva/2_.mp4'
 audio_dir = "../Audio/"
 out_path = "../Videos/"
 text_file = '../Text/output.txt'
@@ -31,6 +32,16 @@ subtitle_file = os.path.join(out_path, NAME + '.vtt')
 with open(text_file, 'r') as file:
     TEXT = file.read()
 
+# Check if the text is empty
+if not TEXT.strip():
+    raise ValueError("The file is empty.")
+
+# Clean up the text
+TEXT = TEXT.replace('"', "'")
+TEXT = TEXT.replace(',', "")
+TEXT = TEXT.replace('.', "")
+TEXT = re.sub(' +', ' ', TEXT)
+
 VOICE = "en-US-GuyNeural"
 OUTPUT_FILE = audio_path
 WEBVTT_FILE = subtitle_file
@@ -39,19 +50,16 @@ async def generate_audio_and_subtitles():
     """Generate audio and subtitles from text."""
     communicate = edge_tts.Communicate(TEXT, VOICE)
     submaker = edge_tts.SubMaker()
-    pbar = tqdm(total=len(TEXT))  # Initialize the progress bar
-
+    pbar = tqdm(total=len(TEXT))
     with open(OUTPUT_FILE, "wb") as file:
         async for chunk in communicate.stream():
             if chunk["type"] == "audio":
                 file.write(chunk["data"])
+                if "data" in chunk:  # Check if the "data" key exists
+                    pbar.update(len(chunk["data"]))  # Update the progress bar
             elif chunk["type"] == "WordBoundary":
                 submaker.create_sub((chunk["offset"], chunk["duration"]), chunk["text"])
-            if "text" in chunk:  # Check if the "text" key exists
-                pbar.update(len(chunk["text"]))  # Update the progress bar
-
-    pbar.close()  # Close the progress bar
-
+    pbar.close()
     with open(WEBVTT_FILE, "w", encoding="utf-8") as file:
         file.write(submaker.generate_subs())
 
