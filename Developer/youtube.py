@@ -7,28 +7,37 @@ from googleapiclient.errors import HttpError
 from requests import Request # type: ignore
 from google.auth.transport.requests import Request
 
-VIDEO_FILE = "son-p3_with_subtitles"
+VIDEO_FILE = "child-p3_with_subtitles"
 CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
+title = "(2) From Little Brat to Supreme Commander: My Unlikely Journey to Leading the Elite Forces."
 description = """
-Awakening Destiny: Mo Xiu's Journey to the Unknown Part - 1
+In the quiet solitude of my room, 
+I left behind a suicide note - a testament of my resolve, a farewell to my past life. 
+At the tender age of 10, with hair barely grown, I embarked on a journey that would change my life forever. 
+I joined the army, leaving behind the comforts of childhood. Months passed, and against all odds, I rose through the ranks. 
+I became a military team instructor, leading an invincible team of female soldiers.
+ My age and appearance belied my strength and determination, for I was a force to be reckoned with.
 
-In the face of impending death, an ordinary man chooses an extraordinary path. 'The Unlikely Exorcist: A Countdown to Immortality' is a riveting tale of a terminally ill patient who, instead of succumbing to his fate, embarks on a thrilling journey of exorcism and immortal punishment. Not driven by a noble cause or the desire to protect his country, but lured by the irresistible temptation of risk salary and compensation. As he navigates through this uncharted territory, he encounters a world beyond his wildest imagination. Will he defy the odds and cheat death? Or will he become another pawn in the game of immortality? Dive into this captivating saga to uncover the truth.
-This new title and description aim to pique the curiosity of potential readers by highlighting the unique premise of the story and the protagonist's unusual motivation. The description also poses questions that readers might be eager to find the answers to, further encouraging them to read the book.
+Part 3
+Platlist: 
+Stay tuned as more parts are coming soon!
 
-Playlist: 
+See other series: 
+The Ordinary Cultivator: https://www.youtube.com/playlist?list=PL_W6A9WF_sWi4a9F8O8Gnx9Bm_TBo4CHm
+My Grandpa Rebbeled: https://www.youtube.com/playlist?list=PL_W6A9WF_sWjuO-F8UFDlJWuxz-BRlVFC
+https://www.youtube.com/playlist?list=PL_W6A9WF_sWhnY2JiNUWBVRnqKP9ALEP5
+.....
 
 If You Need Subtitles, Please Turn on the CC Subtitles in the Lower Right Corner, Enjoy :)
 
+Enjoy the video and don't forget to like, share, and subscribe for more anime, novel and manga content!
+
+NOTE: The plot is purely fictional, please do not bring it into reality
+
 Tags:
 #animerecap #manhwaedit #anime #animerecommendations #manhwarecommendation #manga #mangaunboxing #mangacollection #webtoon #manhwarecap #anime #animerecap 
-
-Copyright Notice
-⚠️ COPYRIGHT NOTICE: All content in this video is the property of MokbhaiMJ. Unauthorized use, reproduction, or commercial display of the content is strictly prohibited without proper authorization.
-Call to Action
-Enjoy the video and don't forget to like, share, and subscribe for more anime and manga content!
-Remember, a good YouTube video description provides context about the video, includes relevant keywords to help users find your video, and encourages viewers to engage with your content.
 """
 
 def get_authenticated_service():
@@ -60,7 +69,7 @@ def initialize_upload(youtube):
         part="snippet,status",
         body={
             "snippet": {
-                "title": "The Unlikely Exorcist: A Countdown to Immortality",
+                "title": title,
                 "description": description,
                 "tags": ["#animerecap", "#manhwaedit", "#anime", "#animerecommendations", "#manhwarecommendation", "#manga", "#mangaunboxing", "#mangacollection", "#webtoon", "#manhwarecap", "#anime", "#animerecap"],
                 "categoryId": "1",

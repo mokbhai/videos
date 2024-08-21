@@ -10,10 +10,10 @@ import os
 import subprocess
 
 # Define paths
-video_path = '../canva/2_.mp4'
+video_path = '../canva/6_.mp4'
 audio_dir = "../Audio/"
 out_path = "../Videos/"
-text_file = '../Text/output.txt'
+text_file = '../Text/new.txt'
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
@@ -38,8 +38,8 @@ if not TEXT.strip():
 
 # Clean up the text
 TEXT = TEXT.replace('"', "'")
-TEXT = TEXT.replace(',', "")
-TEXT = TEXT.replace('.', "")
+# TEXT = TEXT.replace(',', "")
+# TEXT = TEXT.replace('.', "")
 TEXT = re.sub(' +', ' ', TEXT)
 
 VOICE = "en-US-GuyNeural"
@@ -114,6 +114,14 @@ def combine_video_audio_subtitles():
 
     print(f"Output video with subtitles saved to {output_video_with_subtitles_path}")
 
+def upload_drive():
+    subprocess.run([ 'python3', 'drive.py', '--file', audio_path, '--type', '2'  ])
+
+def upload_yt():
+    subprocess.run([ 'python3', 'youtube.py'  ])
+
 if __name__ == "__main__":
     asyncio.run(generate_audio_and_subtitles())
+    # upload_drive();
     combine_video_audio_subtitles()
+    # upload_yt()

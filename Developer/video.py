@@ -2,7 +2,7 @@ from moviepy.editor import * # type: ignore
 import random
 import os
 
-audioFile =  "601-631-grandpa-completed"
+audioFile =  "video"
 fps = 3
 
 audio_dir = "../Audio/"
@@ -40,6 +40,6 @@ source_file = audio_dir + audioFile + ".vtt"
 destination_file = out_path + audioFile + ".vtt"
 
 # Use the os.rename function to move the file
-os.rename(source_file, destination_file)
+# os.rename(source_file, destination_file)
 # os.unlink(audio_dir + audioFile + ".mp3")
 # os.unlink(audio_dir + audioFile + ".vtt")

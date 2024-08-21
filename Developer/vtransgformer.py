@@ -12,19 +12,27 @@ from selenium.webdriver.safari.webdriver import WebDriver # import Safari WebDri
 output_file = '/Users/mokshitjain/Desktop/Audio/Text/output.txt'
 
 def get_html_response(url): 
-    return get_html_response_selenium(url, delay=0)
-    # return get_html_response_BeautifulSoup(url)
+    # return get_html_response_selenium(url, delay=10)
+    return get_html_response_BeautifulSoup(url)
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
+import time
 
 def get_html_response_selenium(url, delay):
-    # options = Options()
-    # options.headless = True
-    # driver = webdriver.Chrome(options=options)
-    driver = WebDriver()
+    options = Options()
+    options.headless = True
+    # Load the unpacked extension
+    options.add_argument("load-extension=./bExtentions/uBlock0.chromium")  # Adjust the path as necessary
+
+    driver = webdriver.Chrome(options=options)
     driver.get(url)
     time.sleep(delay)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
     return soup
+
 
 def get_html_response_BeautifulSoup(url):
     soup = None
@@ -46,23 +54,23 @@ def get_all_text_from_website(url):
             f.write(text)
     return text
 
-def get_text_from_specific_div(soup, div_class=None, div_id=None, translate=0):
+def get_text_from_specific_div(soup, div_class=None, div_id=None, translate=0, where='div'):
     
     divs = ""
     if div_class:
-        divs = soup.find_all('div', class_=div_class)
+        divs = soup.find_all(where, class_=div_class)
     elif div_id:
-        divs = soup.find_all('div', id=div_id)
+        divs = soup.find(id=div_id)
     else:
         return None
     
     text = ' '.join([div.get_text() for div in divs])
     text = text.strip()
     
-    if "转码失败,请重试!" in text:
-        return None
-    if "正在为您转码" in text or "最新网址" in text:
-        return None
+    # if "转码失败,请重试!" in text:
+    #     return None
+    # if "正在为您转码" in text or "最新网址" in text:
+    #     return None
 
     text = text.replace('Translator: Atlas Studios Editor: Atlas Studios', "")
     text = text.replace('Visit and read more novel to help us update chapter quickly.', "")
@@ -147,6 +155,8 @@ def google_translate(text):
     else:
         return None
 
+where = 'div'
+
 # Use the function
 # url = "https://m-xiaoshubao-net.translate.goog/read/385636/23.html?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp" # 320 comp
 # base_url = "https://m.xiaoshubao.net"
@@ -164,15 +174,55 @@ def google_translate(text):
 # translate = 0
 # chapter_index = 101
 
-url = "https://lightnovel.novelupdates.net/book/heavenly-dao-rankings-i-am-exposed-as-the-sword-god/chapter-241" # 0 chapter
-base_url = "https://lightnovel.novelupdates.net"
+url = "https://www.uuks5.com/zh_hant/book/804501/436901871.html" # Gao Wu: My cells can evolve indefinitely
+base_url = "https://www.uuks5.com/zh_hant/book/804501/"
 text_class = ""
-text_id = "chr-content"
-next_class = "next_chap"
+text_id = "mlfy_main_text"
+next_class = "nextChapterBottom"
 translate = 0
-chapter_index = 241
+chapter_index = 191
 
-for i in range(0, 80):
+# url = "http://www.longmawenxue.com/book/3445/879993.html" # From Little Brat to Supreme Commander: My Unlikely Journey to Leading the Elite Forces
+# base_url = "http://www.longmawenxue.com"
+# text_class = ""
+# text_id = "article"
+# next_class = "next_url"
+# translate = 0
+# chapter_index = 251
+
+url = "http://www.longmawenxue.com/book/28/62755.html" # code name sura
+base_url = "http://www.longmawenxue.com"
+text_class = ""
+text_id = "article"
+next_class = "next_url"
+translate = 0
+chapter_index = 31
+
+# url = "https://www.uuks.org/b/192/240161.html" # Temple
+# base_url = "https://www.uuks.org"
+# text_class = ""
+# text_id = "contentbox"
+# next_class = "next"
+# translate = 0
+# chapter_index = 161
+
+# url = "https://www.uuks.org/b/56188/70235161.html" # stepmother
+# base_url = "https://www.uuks.org"
+# text_class = ""
+# text_id = "contentbox"
+# next_class = "next"
+# translate = 0
+# chapter_index = 161
+
+# url = "https://lightnovel.novelupdates.net/book/heavenly-dao-rankings-i-am-exposed-as-the-sword-god/chapter-512-end-returning-to-the-cultivation-world" # completed
+# base_url = "https://lightnovel.novelupdates.net"
+# text_class = "chr-c"
+# text_id = ""
+# next_class = "next_chap"
+# translate = 0
+# chapter_index = 512
+
+for i in range(0, 60):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
 
     soup = get_html_response(url)
@@ -180,12 +230,12 @@ for i in range(0, 80):
     # with open('../Text/index.html', 'w') as f:
     #     f.write(str(soup))
     
-    text = get_text_from_specific_div(soup, div_class=text_class, div_id=text_id, translate=translate)
+    text = get_text_from_specific_div(soup, div_class=text_class, div_id=text_id, translate=translate, where=where)
 
     while not text:
         print("No text found, in " + url + " trying again...")
         soup = get_html_response(url)
-        text = get_text_from_specific_div(soup, div_class=text_class, div_id=text_id, translate=translate)
+        text = get_text_from_specific_div(soup, div_class=text_class, div_id=text_id, translate=translate, where=where)
     
     # with open(output_file, 'a') as f:
     #     f.write("\nChapter: " + str(chapter_index + i) + "\n" + text)
