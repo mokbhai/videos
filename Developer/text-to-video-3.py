@@ -13,7 +13,7 @@ import subprocess
 video_path = '../canva/6_.mp4'
 audio_dir = "../Audio/"
 out_path = "../Videos/"
-text_file = '../Text/new.txt'
+text_file = '../Text/learning5.5.txt'
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
@@ -25,7 +25,7 @@ if not os.path.exists(audio_dir):
     os.makedirs(audio_dir)
 
 audio_path = os.path.join(audio_dir, NAME + '.mp3')
-output_video_with_subtitles_path = os.path.join(out_path, NAME + '_with_subtitles.mp4')
+output_video_with_subtitles_path = os.path.join(out_path, NAME + '.mp4')
 subtitle_file = os.path.join(out_path, NAME + '.vtt')
 
 # Read text from file

@@ -1,3 +1,6 @@
+# ffmpeg -i input.mp4 -vf scale=3840:2160 -c:v libx264 -preset slow -crf 21 output_4k.mp4
+
+
 import os
 import pickle
 from googleapiclient.discovery import build # type: ignore
@@ -7,21 +10,26 @@ from googleapiclient.errors import HttpError
 from requests import Request # type: ignore
 from google.auth.transport.requests import Request
 
-VIDEO_FILE = "child-p3_with_subtitles"
+VIDEO_FILE = "max-level-learning-p2_with_subtitles"
 CLIENT_SECRETS_FILE = "../google_sec.json"
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 
-title = "(2) From Little Brat to Supreme Commander: My Unlikely Journey to Leading the Elite Forces."
+title = "(2) Max level understanding: meditated facing wall of Cliff of Pondering for eighty years."
 description = """
-In the quiet solitude of my room, 
-I left behind a suicide note - a testament of my resolve, a farewell to my past life. 
-At the tender age of 10, with hair barely grown, I embarked on a journey that would change my life forever. 
-I joined the army, leaving behind the comforts of childhood. Months passed, and against all odds, I rose through the ranks. 
-I became a military team instructor, leading an invincible team of female soldiers.
- My age and appearance belied my strength and determination, for I was a force to be reckoned with.
+"Li Qingshan, as a senior disciple of the Yuhua Gate and the prince of the Great Yan Dynasty, was deceived and let go of the Demon Gate Empress. Do you acknowledge your crime?"
+"I am willing to give up my senior disciple identity, be imprisoned at the Repentance Cliff, and wipe the stone tablets clean."
+"Approved, but you must abolish your cultivation, shatter your roots, and never leave for the rest of your life!"
+From then on, Li Qingshan secluded himself at the Repentance Cliff, wiping the stone tablets, and unexpectedly activated the highest level of insight.
+【You carefully watched, triggering the highest level of insight, and comprehended the Great River Sword Qi epiphany】
+【You carefully watched, triggering the highest level of insight, and understood the Triple Sword Strike】
+【You carefully watched, triggering the highest level of insight, and understood the Heavenly Seal】
+Decades later, the Immortal Dao Ranking arrived, listing the top experts in the mortal world, with Li Qingshan directly ranking first.
+The ranking's evaluation of him - God among mortals!
 
-Part 3
-Platlist: 
+Part 2
+
+Playlist: 
+
 Stay tuned as more parts are coming soon!
 
 See other series: 
@@ -36,8 +44,6 @@ Enjoy the video and don't forget to like, share, and subscribe for more anime, n
 
 NOTE: The plot is purely fictional, please do not bring it into reality
 
-Tags:
-#animerecap #manhwaedit #anime #animerecommendations #manhwarecommendation #manga #mangaunboxing #mangacollection #webtoon #manhwarecap #anime #animerecap 
 """
 
 def get_authenticated_service():
@@ -71,7 +77,7 @@ def initialize_upload(youtube):
             "snippet": {
                 "title": title,
                 "description": description,
-                "tags": ["#animerecap", "#manhwaedit", "#anime", "#animerecommendations", "#manhwarecommendation", "#manga", "#mangaunboxing", "#mangacollection", "#webtoon", "#manhwarecap", "#anime", "#animerecap"],
+                "tags": [],
                 "categoryId": "1",
                 "defaultLanguage": "en"
             },

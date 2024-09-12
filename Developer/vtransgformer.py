@@ -1,5 +1,6 @@
+import re
 import time
-from transformers import MarianMTModel, MarianTokenizer # type: ignore
+# from transformers import MarianMTModel, MarianTokenizer # type: ignore
 import requests # type: ignore
 from bs4 import BeautifulSoup # type: ignore
 from googletrans import Translator # type: ignore
@@ -12,8 +13,8 @@ from selenium.webdriver.safari.webdriver import WebDriver # import Safari WebDri
 output_file = '/Users/mokshitjain/Desktop/Audio/Text/output.txt'
 
 def get_html_response(url): 
-    # return get_html_response_selenium(url, delay=10)
-    return get_html_response_BeautifulSoup(url)
+    return get_html_response_selenium(url, delay=0)
+    # return get_html_response_BeautifulSoup(url)
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -71,23 +72,32 @@ def get_text_from_specific_div(soup, div_class=None, div_id=None, translate=0, w
     #     return None
     # if "正在为您转码" in text or "最新网址" in text:
     #     return None
-
-    text = text.replace('Translator: Atlas Studios Editor: Atlas Studios', "")
-    text = text.replace('Visit and read more novel to help us update chapter quickly.', "")
+    
+    # pattern = r'Chapter \d+ [^\n]*\n'
+    # text = re.sub(pattern, '', text)
+    # pattern = r'Translator: [^\n]+ Editor: [^\n]+\n?'
+    # text = re.sub(pattern, '', text)
+    
+    # text = text.replace('Translator: Atlas Studios Editor: Atlas Studios', "")
+    # text = text.replace('Translator: Nyoi-Bo Studio  Editor: Nyoi-Bo Studio', "")
+    # text = text.replace('Visit and read more novel to help us update chapter quickly.', "")
     # text = text.replace("\n\n", " ")
-    text = text.replace("Settings Night Mode :", "")
-    text = text.replace("« PrevNext » ≡ Table of Contents", "")
-    text = text.replace("RAW :", "")
-    text = text.replace("Saving, please wait...", "")
-    text = text.replace("Settings saved..", "")
-    text = text.replace(" Close *You must login to use RAW feature and save the settings permanently.", "")
-    text = text.replace("Font size : \n16", "")
+    # text = text.replace("Settings Night Mode :", "")
+    # text = text.replace("« PrevNext » ≡ Table of Contents", "")
+    # text = text.replace("RAW :", "")
+    # text = text.replace("Saving, please wait...", "")
+    # text = text.replace("Settings saved..", "")
+    # text = text.replace(" Close *You must login to use RAW feature and save the settings permanently.", "")
+    # text = text.replace("Font size : \n16", "")
     # text = text.replace("最新网址：www.xiaoshubao.net", " ")
-    text = text.replace("Latest website: www.xiaoshubao.net", " ")
-    text = text.replace("This chapter is not yet finished, click the next page to continue reading", " ")
-    text = text.replace("<-->>", " ")
-    text = text.replace("br>", " ")
+    # text = text.replace("Latest website: www.xiaoshubao.net", " ")
+    # text = text.replace("This chapter is not yet finished, click the next page to continue reading", " ")
+    # text = text.replace("<-->>", " ")
+    text = text.replace("Ads by PubFuture", " ")
+    # text = text.replace("br>", " ")
     # text = text.replace("<-->>本章未完，点击下一页继续阅读", " ")
+    
+    text = text.replace("\n", " ")
     
     # if (translate == 1): 
     #     return google_translate(text)
@@ -174,13 +184,13 @@ where = 'div'
 # translate = 0
 # chapter_index = 101
 
-url = "https://www.uuks5.com/zh_hant/book/804501/436901871.html" # Gao Wu: My cells can evolve indefinitely
-base_url = "https://www.uuks5.com/zh_hant/book/804501/"
-text_class = ""
-text_id = "mlfy_main_text"
-next_class = "nextChapterBottom"
-translate = 0
-chapter_index = 191
+# url = "https://www.uuks5.com/zh_hant/book/804501/436902221.html" # Gao Wu: My cells can evolve indefinitely
+# base_url = "https://www.uuks5.com/zh_hant/book/804501/"
+# text_class = ""
+# text_id = "mlfy_main_text"
+# next_class = "nextChapterBottom"
+# translate = 0
+# chapter_index = 231
 
 # url = "http://www.longmawenxue.com/book/3445/879993.html" # From Little Brat to Supreme Commander: My Unlikely Journey to Leading the Elite Forces
 # base_url = "http://www.longmawenxue.com"
@@ -190,13 +200,21 @@ chapter_index = 191
 # translate = 0
 # chapter_index = 251
 
-url = "http://www.longmawenxue.com/book/28/62755.html" # code name sura
+# url = "http://www.longmawenxue.com/book/28/62785.html" # code name sura
+# base_url = "http://www.longmawenxue.com"
+# text_class = ""
+# text_id = "article"
+# next_class = "next_url"
+# translate = 0
+# chapter_index = 61
+
+url = "http://www.longmawenxue.com/book/10303/3483982.html" # good-for-nothing young master
 base_url = "http://www.longmawenxue.com"
 text_class = ""
 text_id = "article"
 next_class = "next_url"
 translate = 0
-chapter_index = 31
+chapter_index = 333
 
 # url = "https://www.uuks.org/b/192/240161.html" # Temple
 # base_url = "https://www.uuks.org"
@@ -214,6 +232,14 @@ chapter_index = 31
 # translate = 0
 # chapter_index = 161
 
+url = "https://novelbjn.novelupdates.net/book/seeking-immortality-in-the-world-of-cultivation/chapter-11" # seeking-immortality-in-the-world-of-cultivation
+base_url = "https://novelbjn.novelupdates.net"
+text_class = ""
+text_id = "chr-content"
+next_class = "next_chap"
+translate = 0
+chapter_index = 11
+
 # url = "https://lightnovel.novelupdates.net/book/heavenly-dao-rankings-i-am-exposed-as-the-sword-god/chapter-512-end-returning-to-the-cultivation-world" # completed
 # base_url = "https://lightnovel.novelupdates.net"
 # text_class = "chr-c"
@@ -222,7 +248,7 @@ chapter_index = 31
 # translate = 0
 # chapter_index = 512
 
-for i in range(0, 60):
+for i in range(0, 300):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
 
     soup = get_html_response(url)
@@ -241,7 +267,7 @@ for i in range(0, 60):
     #     f.write("\nChapter: " + str(chapter_index + i) + "\n" + text)
     
     with open(output_file, 'a') as f:
-        f.write("\n" + text)
+        f.write("\n\n" + text)
 
     next_url = get_link_from_id(soup, next_class)
 
