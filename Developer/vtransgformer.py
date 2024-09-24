@@ -13,8 +13,8 @@ from selenium.webdriver.safari.webdriver import WebDriver # import Safari WebDri
 output_file = '/Users/mokshitjain/Desktop/Audio/Text/output.txt'
 
 def get_html_response(url): 
-    return get_html_response_selenium(url, delay=0)
-    # return get_html_response_BeautifulSoup(url)
+    # return get_html_response_selenium(url, delay=0)
+    return get_html_response_BeautifulSoup(url)
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -192,14 +192,6 @@ where = 'div'
 # translate = 0
 # chapter_index = 231
 
-# url = "http://www.longmawenxue.com/book/3445/879993.html" # From Little Brat to Supreme Commander: My Unlikely Journey to Leading the Elite Forces
-# base_url = "http://www.longmawenxue.com"
-# text_class = ""
-# text_id = "article"
-# next_class = "next_url"
-# translate = 0
-# chapter_index = 251
-
 # url = "http://www.longmawenxue.com/book/28/62785.html" # code name sura
 # base_url = "http://www.longmawenxue.com"
 # text_class = ""
@@ -208,13 +200,13 @@ where = 'div'
 # translate = 0
 # chapter_index = 61
 
-url = "http://www.longmawenxue.com/book/10303/3483982.html" # good-for-nothing young master
-base_url = "http://www.longmawenxue.com"
-text_class = ""
-text_id = "article"
-next_class = "next_url"
-translate = 0
-chapter_index = 333
+# url = "http://www.longmawenxue.com/book/10303/3484130.html" # good-for-nothing young master #  Huashan Sword I Rule: Special Forces Soldier Turned into Hero of the Southern Song Dynasty
+# base_url = "http://www.longmawenxue.com"
+# text_class = ""
+# text_id = "article"
+# next_class = "next_url"
+# translate = 0
+# chapter_index = 337
 
 # url = "https://www.uuks.org/b/192/240161.html" # Temple
 # base_url = "https://www.uuks.org"
@@ -232,23 +224,15 @@ chapter_index = 333
 # translate = 0
 # chapter_index = 161
 
-url = "https://novelbjn.novelupdates.net/book/seeking-immortality-in-the-world-of-cultivation/chapter-11" # seeking-immortality-in-the-world-of-cultivation
+url = "https://novelbin.lanovels.org/book/seeking-immortality-in-the-world-of-cultivation/chapter-528-466-three-years-later2" # seeking-immortality-in-the-world-of-cultivation
 base_url = "https://novelbjn.novelupdates.net"
 text_class = ""
 text_id = "chr-content"
 next_class = "next_chap"
 translate = 0
-chapter_index = 11
+chapter_index = 528
 
-# url = "https://lightnovel.novelupdates.net/book/heavenly-dao-rankings-i-am-exposed-as-the-sword-god/chapter-512-end-returning-to-the-cultivation-world" # completed
-# base_url = "https://lightnovel.novelupdates.net"
-# text_class = "chr-c"
-# text_id = ""
-# next_class = "next_chap"
-# translate = 0
-# chapter_index = 512
-
-for i in range(0, 300):
+for i in range(0, 10):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
 
     soup = get_html_response(url)

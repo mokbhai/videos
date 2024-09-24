@@ -121,7 +121,7 @@ def upload_yt():
     subprocess.run([ 'python3', 'youtube.py'  ])
 
 if __name__ == "__main__":
-    asyncio.run(generate_audio_and_subtitles())
+    # asyncio.run(generate_audio_and_subtitles())
     # upload_drive();
     combine_video_audio_subtitles()
     # upload_yt()
