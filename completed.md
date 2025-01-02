@@ -6,4 +6,6 @@
 
 ## "http://www.longmawenxue.com/book/3445/4000415.html" #Done From Little Brat to Supreme Commander: My Unlikely Journey to Leading the Elite Forces
 
-## https://novelbin.com/b/max-level-learning-ability-facing-the-cliff-and-repenting-for-80-years Seeking Immortality In The World Of Cultivation - Max level understanding: meditated facing wall of Cliff of Pondering for eighty years
+## https://novelbin.com/b/max-level-learning-ability-facing-the-cliff-and-repenting-for-80-years  - Max level understanding: meditated facing wall of Cliff of Pondering for eighty years
+
+## "https://novelbin.lanovels.org/book/seeking-immortality-in-the-world-of-cultivation/chapter-528-466-three-years-later2" # Seeking Immortality In The World Of Cultivation seeking-immortality-in-the-world-of-cultivation

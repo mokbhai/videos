@@ -13,8 +13,8 @@ from selenium.webdriver.safari.webdriver import WebDriver # import Safari WebDri
 output_file = '/Users/mokshitjain/Desktop/Audio/Text/output.txt'
 
 def get_html_response(url): 
-    # return get_html_response_selenium(url, delay=0)
-    return get_html_response_BeautifulSoup(url)
+    return get_html_response_selenium(url, delay=0)
+    # return get_html_response_BeautifulSoup(url)
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -200,14 +200,6 @@ where = 'div'
 # translate = 0
 # chapter_index = 61
 
-# url = "http://www.longmawenxue.com/book/10303/3484130.html" # good-for-nothing young master #  Huashan Sword I Rule: Special Forces Soldier Turned into Hero of the Southern Song Dynasty
-# base_url = "http://www.longmawenxue.com"
-# text_class = ""
-# text_id = "article"
-# next_class = "next_url"
-# translate = 0
-# chapter_index = 337
-
 # url = "https://www.uuks.org/b/192/240161.html" # Temple
 # base_url = "https://www.uuks.org"
 # text_class = ""
@@ -224,15 +216,15 @@ where = 'div'
 # translate = 0
 # chapter_index = 161
 
-url = "https://novelbin.lanovels.org/book/seeking-immortality-in-the-world-of-cultivation/chapter-528-466-three-years-later2" # seeking-immortality-in-the-world-of-cultivation
-base_url = "https://novelbjn.novelupdates.net"
-text_class = ""
-text_id = "chr-content"
-next_class = "next_chap"
+url = "https://www.1116.org/shu/806/807167/1521098/"
+base_url = "https://www.1116.org"
+text_class = "readcontent" # copy text from this
+text_id = ""
+next_class = "linkNext" # click on this button with id linkNexr
 translate = 0
-chapter_index = 528
+chapter_index = 329
 
-for i in range(0, 10):
+for i in range(0, 100):
     print("Getting Chapter: ", chapter_index + i, " From ",url)
 
     soup = get_html_response(url)

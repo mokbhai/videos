@@ -1,6 +1,43 @@
 import re
 
-text_path = '../Text/output'
+def find_and_convert_numbers_in_text(text):
+    """
+    Finds all numbers formatted with commas in the given text and converts them to normal numbers.
+    Example: "2,000" -> "2000"
+    """
+    # Regular expression to find numbers with commas (e.g., 2,000, 20,000)
+    pattern = r'\d{1,3}(,\d{3})+'
+    
+    # Function to remove commas from a matched number
+    def remove_commas(match):
+        return match.group(0).replace(",", "")
+    
+    # Replace all matched numbers with their comma-free versions
+    return re.sub(pattern, remove_commas, text)
+
+def process_text_file(input_path, output_path, replacements):
+    """
+    Processes a text file by applying replacements and converting numbers with commas.
+    Writes the cleaned text to an output file.
+    """
+    with open(input_path, 'r') as infile, open(output_path, 'w') as outfile:
+        for line in infile:
+            TEXT = line.strip()
+            if not TEXT:
+                continue
+            
+            # Find and convert numbers with commas in the text
+            TEXT = find_and_convert_numbers_in_text(TEXT)
+            
+            # Apply additional replacements
+            for old, new in replacements:
+                TEXT = TEXT.replace(old, new)
+            
+            # Remove extra spaces
+            TEXT = re.sub(' +', ' ', TEXT)
+            
+            # Write the cleaned text to the output file
+            outfile.write(TEXT + " ")
 
 replacements = [
     ('VIssịT n0(v)eL/b(i)(n).𝘤𝑜𝓂 for the best novel reading experience', ' '),    ('DiisCoover 𝒖pdated novels on n(o)v./e/lbin(.)co𝒎', ' '),    ('𝑅êạd new chapt𝒆rs on no/v/e/l𝒃in(.)com', ' '),    ('T/his chapter is updat𝓮d by n𝒐v(ê(l)biin.co/m', ' '), ('Gêtt the latest ch𝒂pters on n𝒐/velbin(.)com', ' '), ('Ne/w novel chapt𝒆rs are published on no/vel(/bin(.)co/m', ' '),
@@ -19,16 +56,11 @@ replacements = [
     ('Visjt n𝒐velbin(.)c𝒐m for new updates', ' '),    ('Explore new 𝒏ovels on n𝒐velbi𝒏(.)com', ' '),    ('Discover 𝒏ew chapters at novelbi𝒏(.)co𝒎', ' '),
     ('Translator: 549690339', ' '),
     ('Translator: 549690339', ' '),
-    ('\n', ' '),
-    ('"', "'"),
+    ("↑Return to top↑", ""),
+     (',', ' '), ('.', ','), ('?', ','), ('!', ','),
+    ('"', " "), ('\n', ' '),
 ]
 
-with open(text_path + ".txt", 'r') as infile, open(text_path + "_replaced.txt", 'w') as outfile:
-    for line in infile:
-        TEXT = line.strip()
-        if not TEXT:
-            continue
-        for old, new in replacements:
-            TEXT = TEXT.replace(old, new)
-        TEXT = re.sub(' +', ' ', TEXT)
-        outfile.write(TEXT + '\n') 
+if __name__ == "__main__":
+    text_path = 'Text/output'
+    process_text_file(text_path + ".txt", text_path + "_replaced.txt", replacements)

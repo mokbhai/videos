@@ -9,11 +9,13 @@ from tqdm import tqdm  # type: ignore
 import os
 import subprocess
 
+subprocess.run(['python3', 'replacement.py'])
+
 # Define paths
 video_path = '../canva/6_.mp4'
 audio_dir = "../Audio/"
 out_path = "../Videos/"
-text_file = '../Text/learning5.5.txt'
+text_file = '../Text/output_replaced.txt'
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
@@ -121,7 +123,7 @@ def upload_yt():
     subprocess.run([ 'python3', 'youtube.py'  ])
 
 if __name__ == "__main__":
-    # asyncio.run(generate_audio_and_subtitles())
+    asyncio.run(generate_audio_and_subtitles())
     # upload_drive();
-    combine_video_audio_subtitles()
+    # combine_video_audio_subtitles()
     # upload_yt()
